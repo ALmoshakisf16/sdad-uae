@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>بوابة سداد الإمارات</title>
+  <meta name="description" content="بوابة سداد إلكتروني آمنة">
+  
+  <meta property="og:title" content="بوابة سداد الإمارات">
+  <meta property="og:description" content="بوابة سداد الإمارات">
+  <meta property="og:image" content="img/logo.jpg">
+  <meta property="og:type" content="website">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="img/logo.jpg">
+
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* نفس الـ CSS الأصلي لا تغيير فيه */
+    body {
+      margin: 0;
+      font-family: 'Cairo', sans-serif;
+      background: #f5f5f5;
+    }
+
+    .container {
+      max-width: 420px;
+      margin: auto;
+      padding: 15px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 25px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+
+    .logo {
+      width: 140px;
+      margin-bottom: 15px;
+    }
+
+    h1 {
+      color: #0a8f2c;
+      font-size: 26px;
+      margin: 10px 0;
+    }
+
+    .subtitle {
+      color: #666;
+      font-size: 16px;
+    }
+
+    .phone-img {
+      width: 100%;
+      max-width: 260px;
+      margin: 20px auto;
+      display: block;
+    }
+
+    h2 {
+      font-size: 22px;
+      margin: 10px 0;
+      color: #333;
+    }
+
+    p {
+      color: #666;
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      background: #0a8f2c;
+      color: white;
+      border: none;
+      padding: 15px;
+      font-size: 18px;
+      border-radius: 12px;
+      margin-top: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: #087a25;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- Header Card -->
+  <div class="card">
+    <img src="img/logo.jpg" class="logo" alt="logo">
+    <h1>بوابة سداد الإمارات</h1>
+    <div class="subtitle">الدفع الإلكتروني الآمن</div>
+  </div>
+
+  <!-- Info Card -->
+  <div class="card">
+    <img src="img/phone.jpg" class="phone-img" alt="phone">
+
+    <h2>عن سداد الإمارات</h2>
+
+    <p>
+      سداد الإمارات هي منصة دفع إلكتروني آمنة وسهلة الاستخدام تتيح
+      للمواطنين والمقيمين في دولة الإمارات العربية المتحدة دفع
+      فواتيرهم ورسومهم الحكومية والخاصة بكل يسر وأمان.
+    </p>
+
+    <button class="btn" onclick="goNext()">بدء الخدمة</button>
+  </div>
+
+</div>
+
+<script>
+function goNext() {
+  window.location.href = "form.html"; // الصفحة الثانية
+}
+</script>
+
+</body>
+</html>

